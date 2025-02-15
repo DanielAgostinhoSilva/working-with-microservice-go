@@ -19,3 +19,4 @@
 *.ipr
 .DS_STORE
 dev/data/db/
+project/db-data
