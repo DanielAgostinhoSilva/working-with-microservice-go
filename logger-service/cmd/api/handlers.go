@@ -11,11 +11,11 @@ type JSONPayload struct {
 }
 
 func (app *Config) WriteLog(w http.ResponseWriter, r *http.Request) {
-	// read josn into var
+	// read json into var
 	var requestPayload JSONPayload
 	_ = app.readJSON(w, r, &requestPayload)
 
-	// isert data
+	// insert data
 	event := data.LogEntry{
 		Name: requestPayload.Name,
 		Data: requestPayload.Data,
@@ -23,13 +23,14 @@ func (app *Config) WriteLog(w http.ResponseWriter, r *http.Request) {
 
 	err := app.Models.LogEntry.Insert(event)
 	if err != nil {
-		_ = app.errorJSON(w, err)
+		app.errorJSON(w, err)
 		return
 	}
 
 	resp := jsonResponse{
-		Error:   false,
-		Message: "Log entry inserted",
+		Error: false,
+		Message: "logged",
 	}
-	_ = app.writeJSON(w, http.StatusAccepted, resp)
+
+	app.writeJSON(w, http.StatusAccepted, resp)
 }
